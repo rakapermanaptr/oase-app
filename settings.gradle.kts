@@ -29,3 +29,8 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":oaseApp:base")
+include(":oaseApp:data")
+include(":oaseApp:domain")
+include(":oaseApp:presentation")
+include(":oaseApp:design-system")
