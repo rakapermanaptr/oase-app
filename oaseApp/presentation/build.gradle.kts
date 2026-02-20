@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidLint)
 }
 
@@ -61,6 +63,25 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
+                api(projects.oaseApp.base)
+                api(projects.oaseApp.domain)
+                api(projects.oaseApp.designSystem)
+
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.viewModel)
+//
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.materialIconsExtended)
+
+                implementation(libs.compose.navigation)
+
+                // Navigation
+//                implementation(libs.compose.navigation)
             }
         }
 

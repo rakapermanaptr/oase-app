@@ -27,10 +27,16 @@ kotlin {
     
     sourceSets {
         androidMain.dependencies {
+
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.koin.core)
         }
         commonMain.dependencies {
+            api(projects.oaseApp.data)
+            api(projects.oaseApp.presentation)
+
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -39,6 +45,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

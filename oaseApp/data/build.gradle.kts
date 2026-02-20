@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -61,6 +62,23 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
+                api(projects.oaseApp.base)
+                api(projects.oaseApp.domain)
+
+                implementation(libs.supabase.postgrest.kt)
+                implementation(libs.supabase.auth.kt)
+                implementation(libs.supabase.storage.kt)
+
+                // Network
+                implementation(libs.ktor.core)
+                implementation(libs.ktor.negotiation)
+                implementation(libs.ktor.json)
+                implementation(libs.ktor.logging)
+                implementation(libs.ktor.client.auth)
+                implementation(libs.ktor.okhttp)
+                implementation(libs.koin.core)
+
+                implementation(libs.kotlinx.serialization.json)
             }
         }
 
@@ -93,6 +111,7 @@ kotlin {
                 // part of KMP’s default source set hierarchy. Note that this source set depends
                 // on common by default and will correctly pull the iOS artifacts of any
                 // KMP dependencies declared in commonMain.
+                implementation(libs.ktor.darwin)
             }
         }
     }
