@@ -75,7 +75,6 @@ kotlin {
                 implementation(libs.ktor.json)
                 implementation(libs.ktor.logging)
                 implementation(libs.ktor.client.auth)
-                implementation(libs.ktor.okhttp)
                 implementation(libs.koin.core)
 
                 implementation(libs.kotlinx.serialization.json)
@@ -93,6 +92,7 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
+                implementation(libs.ktor.okhttp)
             }
         }
 
