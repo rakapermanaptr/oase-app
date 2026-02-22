@@ -6,6 +6,8 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.realtime.realtime
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
 import org.koin.dsl.module
@@ -21,11 +23,13 @@ val supabaseModule = module {
                 alwaysAutoRefresh = true
             }
             install(Storage)
+            install(Realtime)
         }
     }
 
     single<Postgrest> { get<SupabaseClient>().postgrest }
     single<Auth> { get<SupabaseClient>().auth }
     single<Storage> { get<SupabaseClient>().storage }
+    single<Realtime> { get<SupabaseClient>().realtime }
 }
 

@@ -1,6 +1,17 @@
 package com.rakapermanaptr.presentation.main
 
+import ExploreRoute
+import HavenDetailsRoute
+import HavenRoute
+import HomeRoute
+import ProfileRoute
+import SignInRoute
+import SignUpRoute
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -9,19 +20,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.rakapermanaptr.presentation.ExploreDestination
-import com.rakapermanaptr.presentation.HomeDestination
-import com.rakapermanaptr.presentation.ProfileDestination
-import com.rakapermanaptr.presentation.SignInDestination
-import com.rakapermanaptr.presentation.SignUpDestination
+import androidx.navigation.toRoute
 import com.rakapermanaptr.presentation.auth.signin.SignInScreen
 import com.rakapermanaptr.presentation.auth.signup.SignUpScreen
 import com.rakapermanaptr.presentation.explore.ExploreScreen
+import com.rakapermanaptr.presentation.haven.HavenScreen
+import com.rakapermanaptr.presentation.haven.details.HavenDetailsScreen
 import com.rakapermanaptr.presentation.home.HomeScreen
 import com.rakapermanaptr.presentation.profile.ProfileScreen
 
@@ -29,21 +40,24 @@ import com.rakapermanaptr.presentation.profile.ProfileScreen
 fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentDestination = navBackStackEntry?.destination
 
-    val bottomNavItems = listOf(HomeDestination, ExploreDestination, ProfileDestination)
-    val routesWithBottomBar = bottomNavItems.map { it.route }
+    val showBottomBar = bottomNavItems.any { item ->
+        currentDestination?.hasRoute(item.route::class) == true
+    }
     Scaffold(
         bottomBar = {
-            if (currentRoute in routesWithBottomBar) {
+            if (showBottomBar) {
                 NavigationBar {
-                    bottomNavItems.forEach { screen ->
+                    bottomNavItems.forEach { item ->
+                        val isSelected = currentDestination?.hasRoute(item.route::class) == true
+
                         NavigationBarItem(
-                            icon = { Icon(imageVector = screen.icon!!, contentDescription = screen.title) },
-                            label = { Text(text = screen.title) },
-                            selected = currentRoute == screen.route,
+                            icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
+                            label = { Text(text = item.title) },
+                            selected = isSelected,
                             onClick = {
-                                navController.navigate(screen.route) {
+                                navController.navigate(item.route) { // Navigasi via Object
                                     popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true
                                     }
@@ -59,25 +73,52 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = SignInDestination.route,
+            startDestination = HavenRoute,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(HomeDestination.route) { HomeScreen() }
-            composable(ExploreDestination.route) { ExploreScreen() }
-            composable(ProfileDestination.route) { ProfileScreen() }
-            composable(SignInDestination.route) {
-                SignInScreen(
-                    onNavigateToMain = {
-                        navController.navigate(HomeDestination.route) {
-                            popUpTo(SignInDestination.route) { inclusive = true }
-                        }
-                    },
-                    onNavigateToSignUp = {
-                        navController.navigate(SignUpDestination.route)
+            composable<HavenRoute> {
+                HavenScreen(
+                    onNavigateToHavenDetails = { id ->
+                        navController.navigate(HavenDetailsRoute(roomId = id))
                     }
                 )
             }
-            composable(SignUpDestination.route) { SignUpScreen() }
+
+            composable<HomeRoute> { HomeScreen() }
+            composable<ExploreRoute> { ExploreScreen() }
+            composable<ProfileRoute> { ProfileScreen() }
+
+            composable<SignInRoute> {
+                SignInScreen(
+                    onNavigateToMain = {
+                        navController.navigate(HomeRoute) {
+                            popUpTo<SignInRoute> { inclusive = true }
+                        }
+                    },
+                    onNavigateToSignUp = {
+                        navController.navigate(SignUpRoute)
+                    }
+                )
+            }
+
+            composable<SignUpRoute> { SignUpScreen() }
+
+            composable<HavenDetailsRoute> { backStackEntry ->
+                val details = backStackEntry.toRoute<HavenDetailsRoute>()
+                HavenDetailsScreen(roomId = details.roomId)
+            }
         }
     }
 }
+
+data class BottomNavItem<T : Any>(
+    val route: T,
+    val title: String,
+    val icon: ImageVector
+)
+
+val bottomNavItems = listOf(
+    BottomNavItem(HavenRoute, "Haven", Icons.Default.Home),
+    BottomNavItem(ExploreRoute, "Explore", Icons.Default.TravelExplore),
+    BottomNavItem(ProfileRoute, "Profile", Icons.Default.Person)
+)

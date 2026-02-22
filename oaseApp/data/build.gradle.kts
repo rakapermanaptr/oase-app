@@ -68,6 +68,7 @@ kotlin {
                 implementation(libs.supabase.postgrest.kt)
                 implementation(libs.supabase.auth.kt)
                 implementation(libs.supabase.storage.kt)
+                implementation(libs.supabase.realtime.kt)
 
                 // Network
                 implementation(libs.ktor.core)
@@ -77,6 +78,7 @@ kotlin {
                 implementation(libs.ktor.client.auth)
                 implementation(libs.koin.core)
 
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
                 implementation(libs.kotlinx.serialization.json)
             }
         }

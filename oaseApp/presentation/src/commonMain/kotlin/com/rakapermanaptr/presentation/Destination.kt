@@ -1,43 +1,29 @@
-package com.rakapermanaptr.presentation
-
+import kotlinx.serialization.Serializable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.TravelExplore
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
-interface Destination {
-    val route: String
-    val title: String
+// 1. Definisikan Route sebagai class/object murni
+@Serializable sealed interface Route
+
+@Serializable data object HomeRoute : Route
+@Serializable data object HavenRoute : Route
+@Serializable data object ExploreRoute : Route
+@Serializable data object ProfileRoute : Route
+@Serializable data object SignInRoute : Route
+@Serializable data object SignUpRoute : Route
+@Serializable data class HavenDetailsRoute(val roomId: String) : Route
+
+// 2. Buat UI Wrapper untuk Bottom Bar (Metadata)
+// Ini tidak perlu @Serializable karena hanya dipakai di level UI
+data class NavigationItem(
+    val route: Route,
+    val title: String,
     val icon: ImageVector?
-}
+)
 
-object HomeDestination : Destination {
-    override val route: String = "home_screen"
-    override val title: String = "Home"
-    override val icon: ImageVector = Icons.Default.Home
-}
-
-object ExploreDestination : Destination {
-    override val route: String = "explore_screen"
-    override val title: String = "Explore"
-    override val icon: ImageVector = Icons.Default.TravelExplore
-}
-
-object ProfileDestination : Destination {
-    override val route: String = "profile_screen"
-    override val title: String = "Profile"
-    override val icon: ImageVector = Icons.Default.Person
-}
-
-data object SignInDestination : Destination {
-    override val route: String = "sign_in_screen"
-    override val title: String = "Sign In"
-    override val icon: ImageVector? = null
-}
-
-data object SignUpDestination : Destination {
-    override val route: String = "sign_up_screen"
-    override val title: String = "Sign Up"
-    override val icon: ImageVector? = null
-}
+val bottomNavItems = listOf(
+    NavigationItem(HavenRoute, "Haven", Icons.Default.Home),
+    NavigationItem(ExploreRoute, "Explore", Icons.Default.TravelExplore),
+    NavigationItem(ProfileRoute, "Profile", Icons.Default.Person)
+)
