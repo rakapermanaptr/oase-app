@@ -1,4 +1,4 @@
-package com.rakapermanaptr.presentation.main
+package com.rakapermanaptr.presentation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -25,7 +25,19 @@ object ExploreDestination : Destination {
 }
 
 object ProfileDestination : Destination {
-    override val route: String = "route_screen"
+    override val route: String = "profile_screen"
     override val title: String = "Profile"
     override val icon: ImageVector = Icons.Default.Person
+}
+
+data object SignInDestination : Destination {
+    override val route: String = "sign_in_screen"
+    override val title: String = "Sign In"
+    override val icon: ImageVector? = null
+}
+
+data object SignUpDestination : Destination {
+    override val route: String = "sign_up_screen"
+    override val title: String = "Sign Up"
+    override val icon: ImageVector? = null
 }

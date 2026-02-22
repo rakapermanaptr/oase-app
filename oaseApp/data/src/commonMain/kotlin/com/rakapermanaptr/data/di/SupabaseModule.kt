@@ -17,7 +17,9 @@ val supabaseModule = module {
             supabaseKey = "sb_publishable_KCwDoF01Hmfut5yVJhsrRA_NizdD9IW"
         ) {
             install(Postgrest)
-            install(Auth)
+            install(Auth) {
+                alwaysAutoRefresh = true
+            }
             install(Storage)
         }
     }

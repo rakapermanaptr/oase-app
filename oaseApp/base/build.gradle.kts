@@ -62,6 +62,8 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 // Add KMP dependencies here
                 implementation(libs.koin.viewModel)
+
+                implementation(libs.supabase.auth.kt)
             }
         }
 

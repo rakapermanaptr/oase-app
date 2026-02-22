@@ -1,9 +1,13 @@
 package com.rakapermanaptr.presentation.di
 
+import com.rakapermanaptr.presentation.auth.signin.di.signInViewModelModule
+import com.rakapermanaptr.presentation.auth.signup.di.signUpViewModelModule
 import com.rakapermanaptr.presentation.home.di.homeViewModelModule
 import org.koin.core.module.Module
 
 val viewModelModules: List<Module>
     get() = listOf(
-        homeViewModelModule
+        homeViewModelModule,
+        signUpViewModelModule,
+        signInViewModelModule
     )
