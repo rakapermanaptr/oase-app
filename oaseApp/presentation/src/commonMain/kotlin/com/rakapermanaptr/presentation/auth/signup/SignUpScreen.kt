@@ -23,9 +23,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SignUpScreen(viewModel: SignUpViewModel = koinViewModel()) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
     val state by viewModel.state.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -46,6 +43,16 @@ fun SignUpScreen(viewModel: SignUpViewModel = koinViewModel()) {
             )
 
             OaseTextField(
+                value = state.displayName,
+                onValueChange = {
+                    viewModel.onEvent(SignUpViewEvent.OnUpdateDisplayName(it))
+                },
+                label = "Display Name",
+                placeholder = "",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+
+            OaseTextField(
                 value = state.password,
                 onValueChange = {
                     viewModel.onEvent(SignUpViewEvent.OnUpdatePassword(it))
@@ -58,7 +65,13 @@ fun SignUpScreen(viewModel: SignUpViewModel = koinViewModel()) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    viewModel.onEvent(SignUpViewEvent.OnButtonSignUpClicked(state.email, state.password))
+                    viewModel.onEvent(
+                        SignUpViewEvent.OnButtonSignUpClicked(
+                            state.email,
+                            state.password,
+                            state.displayName
+                        )
+                    )
                 }
             ) {
                 Text(text = "Sign up")

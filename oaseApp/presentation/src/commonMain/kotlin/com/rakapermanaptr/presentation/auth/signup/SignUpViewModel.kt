@@ -16,8 +16,14 @@ class SignUpViewModel(
     override suspend fun handleEvent(event: SignUpViewEvent) {
         when (event) {
             is SignUpViewEvent.OnUpdateEmail -> updateEmail(email = event.email)
+            is SignUpViewEvent.OnUpdateDisplayName -> updateDisplayName(displayName = event.displayName)
             is SignUpViewEvent.OnUpdatePassword -> updatePassword(password = event.password)
-            is SignUpViewEvent.OnButtonSignUpClicked -> signUp(email = event.email, password = event.password)
+            is SignUpViewEvent.OnButtonSignUpClicked -> signUp(
+                email = event.email,
+                password = event.password,
+                displayName = event.displayName
+            )
+
         }
     }
 
@@ -25,13 +31,17 @@ class SignUpViewModel(
         setState { copy(email = email) }
     }
 
+    private fun updateDisplayName(displayName: String) {
+        setState { copy(displayName = displayName) }
+    }
+
     private fun updatePassword(password: String) {
         setState { copy(password = password) }
     }
 
-    private fun signUp(email: String, password: String) {
+    private fun signUp(email: String, password: String, displayName: String) {
         viewModelScope.launch {
-            postSignUpUseCase(email, password)
+            postSignUpUseCase(email, password, displayName)
                 .onSuccess {
                     AppLogger.d("SignUp", "onSuccess")
                 }
